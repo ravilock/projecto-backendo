@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: backend-db
+    environment:
+      MYSQL_ROOT_PASSWORD: backend-db
+      MYSQL_DATABASE: backend-db
+      MYSQL_USER: backend-db
+      MYSQL_PASSWORD: backend-db
+    ports:
+      - "3306:3306"
