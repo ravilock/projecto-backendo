@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -50,8 +50,23 @@
         <artifactId>lombok</artifactId>
         <version>1.18.34</version>
         <scope>provided</scope>
+	</dependency>
+    <!-- Dependência do Spring Web (para criar a API REST) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-
+    <!-- Dependência do Spring Security (se você for adicionar autenticação e segurança ao seu projeto) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <!-- Dependência do Spring Boot DevTools (para facilitar o desenvolvimento) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <scope>runtime</scope>
+    </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
