@@ -1,8 +1,10 @@
 package com.example.mapaCife.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,34 +12,40 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 
 import com.example.mapaCife.dto.RegisterDTO;
+import com.example.mapaCife.dto.UserDTO;
+import com.example.mapaCife.dto.UserMapper;
 import com.example.mapaCife.models.User;
+import com.example.mapaCife.models.UserRole;
 import com.example.mapaCife.repository.UserRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api")
+@Validated
 public class AuthenticationController {
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("/users")
-    public ResponseEntity<User> register(@RequestBody RegisterDTO registerDTO) {
-
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO) {
         if (userRepository.findByUsername(registerDTO.username()) != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("user already exists");
         }
 
         User user = new User();
         user.setUsername(registerDTO.username());
         user.setPassword(new BCryptPasswordEncoder().encode(registerDTO.password()));
-        user.setRole(registerDTO.role());
+        user.setRole(UserRole.USER);
         user.setName(registerDTO.name());
         user.setEmail(registerDTO.email());
         user.setCreatedAt(new Date());
 
         userRepository.save(user);
 
-        return ResponseEntity.ok().build();
+        UserDTO response = UserMapper.toDTO(user, "");
+        return ResponseEntity.ok().body(response);
     }
 
 }
