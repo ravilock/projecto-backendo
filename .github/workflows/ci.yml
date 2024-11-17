@@ -1,0 +1,52 @@
+name: Java CI
+
+# Trigger the workflow on push and pull_request events to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # The OS for the CI environment (Ubuntu)
+
+    services:
+      db:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: backend-db
+          MYSQL_DATABASE: backend-db
+          MYSQL_USER: backend-db
+          MYSQL_PASSWORD: backend-db
+        ports:
+          - "3306:3306"
+        options: --health-cmd="mysqladmin ping --host localhost --user=backend-db --password=backend-db"
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up JDK (Java Development Kit)
+      - name: Set up JDK 21
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '21'  # Use the version of Java your project requires (e.g., 8, 11, 17, etc.)
+
+      # Cache Maven dependencies to speed up the build
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository  # Maven's local repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}  # Cache key based on pom.xml file
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # Run Maven build and tests
+      - name: Build and test with Maven
+        working-directory: ./mapaCife
+        run: mvn clean install --no-transfer-progress --batch-mode

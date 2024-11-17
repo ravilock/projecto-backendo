@@ -24,28 +24,31 @@ import jakarta.validation.Valid;
 @RequestMapping("api")
 @Validated
 public class AuthenticationController {
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @PostMapping("/users")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO) {
-        if (userRepository.findByUsername(registerDTO.username()) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("user already exists");
-        }
-
-        User user = new User();
-        user.setUsername(registerDTO.username());
-        user.setPassword(new BCryptPasswordEncoder().encode(registerDTO.password()));
-        user.setRole(UserRole.USER);
-        user.setName(registerDTO.name());
-        user.setEmail(registerDTO.email());
-        user.setCreatedAt(new Date());
-
-        userRepository.save(user);
-
-        UserDTO response = UserMapper.toDTO(user, "");
-        return ResponseEntity.ok().body(response);
+  @PostMapping("/users")
+  public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO) {
+    if (userRepository.findByUsername(registerDTO.username()) != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("user already exists");
     }
 
+    User user = new User();
+    user.setUsername(registerDTO.username());
+    user.setPassword(new BCryptPasswordEncoder().encode(registerDTO.password()));
+    user.setRole(UserRole.USER);
+    user.setName(registerDTO.name());
+    user.setEmail(registerDTO.email());
+    user.setCreatedAt(new Date());
+
+    try {
+      userRepository.save(user);
+    } catch (Exception e) {
+      System.out.printf("Failed to save user: %s", e.toString());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
+    }
+
+    UserDTO response = UserMapper.toDTO(user, "");
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
 }
