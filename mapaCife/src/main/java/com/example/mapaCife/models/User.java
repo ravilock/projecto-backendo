@@ -22,26 +22,26 @@ import lombok.Data;
 @Data
 public class User implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
-    private String email;
-    private String password;
-    private Date createdAt;
-    private String username;
+  private String name;
+  private String email;
+  private String password;
+  private Date createdAt;
+  private String username;
 
-    @Enumerated(EnumType.STRING)
-    private UserRole role;
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == UserRole.ADMIN) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_USER"));
-        }
-
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    if (role == UserRole.ADMIN) {
+      return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+          new SimpleGrantedAuthority("ROLE_USER"));
     }
+
+    return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+  }
 }

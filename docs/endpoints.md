@@ -16,10 +16,8 @@ Example request body:
 
 ```JSON
 {
-  "user":{
-    "email": "jake@jake.jake",
-    "password": "jakejake"
-  }
+  "email": "jake@jake.jake",
+  "password": "jakejake"
 }
 ```
 
@@ -35,17 +33,16 @@ Example request body:
 
 ```JSON
 {
-  "user":{
-    "username": "Jacob",
-    "email": "jake@jake.jake",
-    "password": "jakejake"
-  }
+  "username": "Jacob",
+  "name": "Jacob Jacobin",
+  "email": "jake@jake.jake",
+  "password": "jakejake"
 }
 ```
 
 No authentication required, returns a [User](./api-response-format.md#users-for-authentication)
 
-Required fields: `email`, `username`, `password`
+Required fields: `email`, `username`, `password`, `name`
 
 ### Get Current User
 
@@ -107,13 +104,11 @@ Example request body:
 
 ```JSON
 {
-  "tourist-spot": {
-    "name": "Pika de Brennand",
-    "gmaps-link": "https://batata.com"
-    "description": "Ever wonder how?",
-    "typeList": ["praca"],
-    "paid": false
-  }
+  "name": "Pika de Brennand",
+  "gmaps-link": "https://batata.com",
+  "description": "Ever wonder how?",
+  "typeList": ["praca"],
+  "paid": false
 }
 ```
 
@@ -131,9 +126,7 @@ Example request body:
 
 ```JSON
 {
-  "tourist-spot": {
-    "title": "Did you train your dragon?"
-  }
+  "title": "Did you train your dragon?"
 }
 ```
 
@@ -157,9 +150,7 @@ Example request body:
 
 ```JSON
 {
-  "comment": {
-    "body": "His name was my name too."
-  }
+  "body": "His name was my name too."
 }
 ```
 
@@ -187,9 +178,7 @@ Example request body:
 
 ```JSON
 {
-  "rating": {
-    "value": 4.3
-  }
+  "value": 4.3
 }
 ```
 

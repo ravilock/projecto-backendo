@@ -10,12 +10,11 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "user": {
-    "email": "jake@jake.jake",
-    "token": "jwt.token.here",
-    "username": "jake",
-    "image": null
-  }
+  "name": "Jake Jakeson",
+  "email": "jake@jake.jake",
+  "token": "jwt.token.here",
+  "username": "jake",
+  "createdAt": "2024-11-17T04:21:02.387+00:00"
 }
 ```
 
@@ -23,10 +22,8 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "profile": {
-    "username": "jake",
-    "image": "https://api.realworld.io/images/smiley-cyrus.jpg",
-  }
+  "name": "Jake Jakeson",
+  "username": "jake",
 }
 ```
 
@@ -34,15 +31,13 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "tourist-spot": {
-    "slug": "how-to-train-your-dragon",
-    "name": "How to train your dragon",
-    "description": "Ever wonder how?",
-    "typeList": ["dragons", "training"],
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:48:35.824Z",
-    "averageRating": 4.4
-  }
+  "slug": "how-to-train-your-dragon",
+  "name": "How to train your dragon",
+  "description": "Ever wonder how?",
+  "typeList": ["dragons", "training"],
+  "createdAt": "2016-02-18T03:22:56.637Z",
+  "updatedAt": "2016-02-18T03:48:35.824Z",
+  "averageRating": 4.4
 }
 ```
 
@@ -87,17 +82,15 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "comment": {
-    "id": 1,
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:22:56.637Z",
-    "body": "It takes a Jacobian",
-    "author": {
-      "username": "jake",
-      "bio": "I work at statefarm",
-      "image": "https://i.stack.imgur.com/xHWG8.jpg",
-      "following": false
-    }
+  "id": 1,
+  "createdAt": "2016-02-18T03:22:56.637Z",
+  "updatedAt": "2016-02-18T03:22:56.637Z",
+  "body": "It takes a Jacobian",
+  "author": {
+    "username": "jake",
+    "bio": "I work at statefarm",
+    "image": "https://i.stack.imgur.com/xHWG8.jpg",
+    "following": false
   }
 }
 ```
@@ -125,12 +118,10 @@ Make sure the right content type like `Content-Type: application/json; charset=u
 
 ```JSON
 {
-  "rating": {
-    "id": 1,
-    "value": 4.3,
-    "createdAt": "2016-02-18T03:22:56.637Z",
-    "updatedAt": "2016-02-18T03:22:56.637Z"
-  }
+  "id": 1,
+  "value": 4.3,
+  "createdAt": "2016-02-18T03:22:56.637Z",
+  "updatedAt": "2016-02-18T03:22:56.637Z"
 }
 ```
 
