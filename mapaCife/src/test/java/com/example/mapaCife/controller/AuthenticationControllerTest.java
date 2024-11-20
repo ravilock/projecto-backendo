@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -25,6 +26,7 @@ import com.example.mapaCife.dto.RegisterDTO;
 import com.example.mapaCife.models.User;
 import com.example.mapaCife.models.UserRole;
 import com.example.mapaCife.repository.UserRepository;
+import com.example.mapaCife.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +39,12 @@ public class AuthenticationControllerTest {
 
   @MockBean
   private UserRepository userRepository;
+
+  @MockBean
+  private TokenService tokenService;
+
+  @MockBean
+  private AuthenticationManager authenticationManager;
 
   @Autowired
   private ObjectMapper objectMapper;
