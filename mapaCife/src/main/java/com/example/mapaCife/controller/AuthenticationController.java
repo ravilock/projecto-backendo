@@ -5,9 +5,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -68,13 +65,14 @@ public class AuthenticationController {
     user.setCreatedAt(new Date());
 
     try {
-      userRepository.save(user);
+      user = userRepository.save(user);
     } catch (Exception e) {
       System.out.printf("Failed to save user: %s", e.toString());
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
     }
 
-    UserDTO response = UserMapper.toDTO(user, "");
+    String token = tokenService.generateToken(user);
+    UserDTO response = UserMapper.toDTO(user, token);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
   }
