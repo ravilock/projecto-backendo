@@ -14,17 +14,18 @@ import lombok.Data;
 @Table(name = "TouristicSpot")
 @Data
 public class TouristicSpot {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
 
-    private String slug;
-    private String name;
-    private String description;
-    private String gmapsLink;
-    private List<String> typeList;
-    private Date createdAt;
-    private Date updatedAt;
-    private Float averagRating;
+  private String slug;
+  private String name;
+  private String description;
+  private String gmapsLink;
+  private List<String> typeList;
+  private Date createdAt;
+  private Date updatedAt;
+  private Boolean paid;
+  private Float averagRating;
 
 }

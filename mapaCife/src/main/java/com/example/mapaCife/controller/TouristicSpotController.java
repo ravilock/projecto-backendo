@@ -24,33 +24,39 @@ import jakarta.validation.Valid;
 @Validated
 public class TouristicSpotController {
 
-    @Autowired
-    private TouristicSpotRepository touristicSpotRepository;
+  @Autowired
+  private TouristicSpotRepository touristicSpotRepository;
 
-    @PostMapping("/touristic-spots")
-    public ResponseEntity<?> createTouristicSpot(@RequestBody @Valid CreateTouristicSpotDTO dto) {
-        String slug = dto.name().replace(" ", "-").toLowerCase();
-        if (touristicSpotRepository.findBySlug(slug) != null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("touristic spot already exists");
-        }
-        TouristicSpot touristicSpot = new TouristicSpot();
-        touristicSpot.setSlug(slug);
-        touristicSpot.setName(dto.name());
-        touristicSpot.setDescription(dto.description());
-        touristicSpot.setGmapsLink(dto.gmapsLink());
-        touristicSpot.setTypeList(dto.typeList());
-        touristicSpot.setCreatedAt(new Date());
-        touristicSpot.setUpdatedAt(new Date());
-
-        try {
-            touristicSpot = touristicSpotRepository.save(touristicSpot);
-        } catch (Exception e) {
-            System.out.printf("Failed to save touristic spot: %s", e.toString());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
-        }
-
-        TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+  @PostMapping("/touristic-spots")
+  public ResponseEntity<?> createTouristicSpot(@RequestBody @Valid CreateTouristicSpotDTO dto) {
+    String slug = dto.name().replace(" ", "-").toLowerCase();
+    if (touristicSpotRepository.findBySlug(slug) != null) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).body("touristic spot already exists");
     }
+    TouristicSpot touristicSpot = new TouristicSpot();
+    touristicSpot.setSlug(slug);
+    touristicSpot.setName(dto.name());
+    touristicSpot.setDescription(dto.description());
+    touristicSpot.setGmapsLink(dto.gmapsLink());
+    touristicSpot.setTypeList(dto.typeList());
+    touristicSpot.setCreatedAt(new Date());
+    touristicSpot.setUpdatedAt(new Date());
+    touristicSpot.setPaid(dto.paid());
+
+    System.out.println(touristicSpot);
+    System.out.println("Ravizino 1");
+    try {
+      touristicSpot = touristicSpotRepository.save(touristicSpot);
+    } catch (Exception e) {
+      System.out.printf("Failed to save touristic spot: %s", e.toString());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
+    }
+    
+    System.out.println(touristicSpot);
+    System.out.println("Ravizino 2");
+
+    TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
+    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+  }
 }
