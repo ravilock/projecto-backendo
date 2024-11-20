@@ -12,7 +12,7 @@ Programadores:
 - Felipe
   - Login (autenticacao + autorizacao)
 
-- Rayane
+- Ilisis
   - Cadastro, Edicao e delecao de ponto turísticos (autorizacao)
 
 - Jéssica
@@ -21,7 +21,7 @@ Programadores:
   - Deletar avaliacao
   - Deletar comentario
 
-- Ilisis
+- Rayane
   - Leitura de pontos turísticos (+ filtros) e leitura de comentários
 
 - MapaCife
