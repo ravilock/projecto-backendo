@@ -27,7 +27,7 @@ public class SecurityConfiguration {
             .requestMatchers(HttpMethod.GET, "/healthcheck").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/touristic-spots").hasRole("USER")
+            .requestMatchers(HttpMethod.POST, "/api/touristic-spots").hasRole("ADMIN")
             .anyRequest().authenticated())
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
