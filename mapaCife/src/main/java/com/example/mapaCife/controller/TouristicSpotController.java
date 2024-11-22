@@ -4,9 +4,14 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.mapaCife.dto.CreateTouristicSpotDTO;
 import com.example.mapaCife.dto.TouristicSpotDTO;
 import com.example.mapaCife.dto.TouristicSpotMapper;
+import com.example.mapaCife.dto.UpdateTouristicSpotDTO;
+import com.example.mapaCife.exception.ResourceNotFoundException;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.repository.TouristicSpotRepository;
+import com.example.mapaCife.service.TouristicSpotService;
 
 import jakarta.validation.Valid;
 
@@ -26,6 +34,9 @@ public class TouristicSpotController {
 
   @Autowired
   private TouristicSpotRepository touristicSpotRepository;
+
+  @Autowired
+  private TouristicSpotService touristicSpotService;
 
   @PostMapping("/touristic-spots")
   public ResponseEntity<?> createTouristicSpot(@RequestBody @Valid CreateTouristicSpotDTO dto) {
@@ -43,20 +54,48 @@ public class TouristicSpotController {
     touristicSpot.setUpdatedAt(new Date());
     touristicSpot.setPaid(dto.paid());
 
-    System.out.println(touristicSpot);
-    System.out.println("Ravizino 1");
     try {
       touristicSpot = touristicSpotRepository.save(touristicSpot);
     } catch (Exception e) {
       System.out.printf("Failed to save touristic spot: %s", e.toString());
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
     }
-    
-    System.out.println(touristicSpot);
-    System.out.println("Ravizino 2");
 
     TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
   }
+
+  @GetMapping("touristic-spots/{slug}")
+  public ResponseEntity<?> getTouristicSpot(@PathVariable String slug){
+    TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
+    if (touristicSpot == null){
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+    }
+    TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
+  }
+  
+  @PutMapping("/touristic-spots/{slug}")
+  public ResponseEntity<?> updateTouristicSpot(@PathVariable String slug,
+      @RequestBody @Valid UpdateTouristicSpotDTO dto) {
+    try {
+      TouristicSpot touristicSpot = touristicSpotService.updateTouristicSpot(slug, dto);
+      TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+    } catch (ResourceNotFoundException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic spot not found!");
+    }
+  }
+
+  @DeleteMapping("/touristic-spots/{slug}")
+  public ResponseEntity<?> deleteTouristicSpot(@PathVariable String slug) {
+    TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
+    if (touristicSpot == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic spot not found!");
+    }
+    touristicSpotRepository.delete(touristicSpot);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
 }
