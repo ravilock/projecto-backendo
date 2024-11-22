@@ -28,6 +28,8 @@ public class SecurityConfiguration {
             .requestMatchers(HttpMethod.POST, "/api/users/login").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
             .requestMatchers(HttpMethod.POST, "/api/touristic-spots").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.DELETE, "/api/touristic-spots/{slug}").hasRole("ADMIN")
+            .requestMatchers(HttpMethod.PUT, "/api/touristic-spots/{slug}").hasRole("ADMIN")
             .anyRequest().authenticated())
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();

@@ -27,5 +27,4 @@ public class TouristicSpot {
   private Date updatedAt;
   private Boolean paid;
   private Float averagRating;
-
 }

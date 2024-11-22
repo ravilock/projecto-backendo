@@ -8,6 +8,6 @@ import com.example.mapaCife.models.TouristicSpot;
 @Repository
 public interface TouristicSpotRepository extends JpaRepository<TouristicSpot, Long> {
 
-    TouristicSpot findBySlug(String slug);
+  TouristicSpot findBySlug(String slug);
 
 }

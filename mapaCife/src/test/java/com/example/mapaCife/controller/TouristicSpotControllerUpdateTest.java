@@ -1,6 +1,6 @@
 package com.example.mapaCife.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.Matchers.is;
@@ -21,7 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.mapaCife.config.SecurityConfiguration;
-import com.example.mapaCife.dto.CreateTouristicSpotDTO;
+import com.example.mapaCife.dto.UpdateTouristicSpotDTO;
+import com.example.mapaCife.exception.ResourceNotFoundException;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.models.User;
 import com.example.mapaCife.models.UserRole;
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringRunner.class)
 @WebMvcTest(TouristicSpotController.class)
 @Import({ SecurityConfiguration.class, TokenService.class })
-public class TouristicSpotControllerCreateTest {
+public class TouristicSpotControllerUpdateTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -55,7 +56,7 @@ public class TouristicSpotControllerCreateTest {
   private ObjectMapper objectMapper;
 
   @Test
-  public void testCreateTouristicSpot_Success() throws Exception {
+  public void testUpdateTouristicSpot_Success() throws Exception {
     // Arrange
     User user = new User();
     user.setUsername("test-username");
@@ -64,38 +65,39 @@ public class TouristicSpotControllerCreateTest {
 
     ArrayList<String> typeList = new ArrayList<String>();
     typeList.add("batata");
-    CreateTouristicSpotDTO createTouristicSpotDTO = new CreateTouristicSpotDTO(
-        "Recife Antigo",
+    String oldSlug = "recife-antigo";
+    UpdateTouristicSpotDTO updateTouristicSpotDTO = new UpdateTouristicSpotDTO(
+        "Recife Novo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
         typeList,
         false);
-    String slug = createTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
+    String slug = updateTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
 
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setSlug(slug);
-    mockTouristicSpot.setName(createTouristicSpotDTO.name());
-    mockTouristicSpot.setDescription(createTouristicSpotDTO.description());
-    mockTouristicSpot.setGmapsLink(createTouristicSpotDTO.gmapsLink());
+    mockTouristicSpot.setName(updateTouristicSpotDTO.name());
+    mockTouristicSpot.setDescription(updateTouristicSpotDTO.description());
+    mockTouristicSpot.setGmapsLink(updateTouristicSpotDTO.gmapsLink());
     mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
-    mockTouristicSpot.setPaid(createTouristicSpotDTO.paid());
+    mockTouristicSpot.setPaid(updateTouristicSpotDTO.paid());
 
     Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
-    Mockito.when(touristicSpotRepository.findBySlug(slug)).thenReturn(null);
-    Mockito.when(touristicSpotRepository.save(Mockito.any(TouristicSpot.class))).thenReturn(mockTouristicSpot);
+    Mockito.when(touristicSpotService.updateTouristicSpot(oldSlug, updateTouristicSpotDTO))
+        .thenReturn(mockTouristicSpot);
 
     // Act
-    ResultActions result = mockMvc.perform(post("/api/touristic-spots")
+    ResultActions result = mockMvc.perform(put(String.format("/api/touristic-spots/%s", oldSlug))
         .header("Authorization", "Bearer " + token)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(createTouristicSpotDTO)));
+        .content(objectMapper.writeValueAsString(updateTouristicSpotDTO)));
 
     // Assert
     result
-        .andExpect(status().isCreated())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$.slug", is(mockTouristicSpot.getSlug())))
         .andExpect(jsonPath("$.name", is(mockTouristicSpot.getName())))
         .andExpect(jsonPath("$.description", is(mockTouristicSpot.getDescription())))
@@ -105,7 +107,7 @@ public class TouristicSpotControllerCreateTest {
   }
 
   @Test
-  public void testCreateTouristicSpot_FailConflict() throws Exception {
+  public void testUpdateTouristicSpot_FailNotFound() throws Exception {
     // Arrange
     User user = new User();
     user.setUsername("test-username");
@@ -114,36 +116,26 @@ public class TouristicSpotControllerCreateTest {
 
     ArrayList<String> typeList = new ArrayList<String>();
     typeList.add("batata");
-    CreateTouristicSpotDTO createTouristicSpotDTO = new CreateTouristicSpotDTO(
-        "Recife Antigo",
+    String oldSlug = "recife-antigo";
+    UpdateTouristicSpotDTO updateTouristicSpotDTO = new UpdateTouristicSpotDTO(
+        "Recife Novo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
         typeList,
         false);
-    String slug = createTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
-
-    TouristicSpot mockTouristicSpot = new TouristicSpot();
-    mockTouristicSpot.setId(Long.valueOf(1));
-    mockTouristicSpot.setSlug(slug);
-    mockTouristicSpot.setName(createTouristicSpotDTO.name());
-    mockTouristicSpot.setDescription(createTouristicSpotDTO.description());
-    mockTouristicSpot.setGmapsLink(createTouristicSpotDTO.gmapsLink());
-    mockTouristicSpot.setTypeList(typeList);
-    mockTouristicSpot.setCreatedAt(new Date());
-    mockTouristicSpot.setUpdatedAt(new Date());
-    mockTouristicSpot.setPaid(createTouristicSpotDTO.paid());
 
     Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
-    Mockito.when(touristicSpotRepository.findBySlug(slug)).thenReturn(mockTouristicSpot);
+    Mockito.doThrow(new ResourceNotFoundException(oldSlug))
+    .when(touristicSpotService)
+    .updateTouristicSpot(oldSlug, updateTouristicSpotDTO);
 
     // Act
-    ResultActions result = mockMvc.perform(post("/api/touristic-spots")
+    ResultActions result = mockMvc.perform(put(String.format("/api/touristic-spots/%s", oldSlug))
         .header("Authorization", "Bearer " + token)
         .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(createTouristicSpotDTO)));
+        .content(objectMapper.writeValueAsString(updateTouristicSpotDTO)));
 
     // Assert
-    result
-        .andExpect(status().isConflict());
+    result.andExpect(status().isNotFound());
   }
 }
