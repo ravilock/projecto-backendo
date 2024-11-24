@@ -10,18 +10,19 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Avaliacao {
-    
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int nota;
+    private String text;
 
-    private String usuario;
+    private String User;
 
     @ManyToOne
     @JoinColumn(name = "touristic_spot_id", nullable = false)
     private TouristicSpot touristicSpot;
-}
 
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+}
