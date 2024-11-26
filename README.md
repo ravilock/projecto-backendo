@@ -12,17 +12,29 @@ Programadores:
 - Felipe
   - Login (autenticacao + autorizacao)
 
-- Ilisis
+- Isis
   - Cadastro, Edicao e delecao de ponto turísticos (autorizacao)
 
-- Jéssica
+- Rayane
   - Escrita de comentários
   - Escrita de avaliacao
   - Deletar avaliacao
   - Deletar comentario
 
-- Rayane
+- Jéssica
   - Leitura de pontos turísticos (+ filtros) e leitura de comentários
+
+- Angelo
+  - Documentacao Swagger (Open API)
+
+- Túlio
+  - Documentacao de endpoints
+
+- Taís e Lívia
+  - Deploy
+
+- Ravi
+  - Automacao para calculo de médias
 
 - MapaCife
   - Cadastro de usuários
