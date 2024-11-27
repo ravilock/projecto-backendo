@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.mapaCife.dto.CreateCommentDTO;
@@ -25,5 +27,10 @@ public class CommentService {
     comment.setAuthor(commentAuthor);
     comment.setTouristicSpot(touristicSpot);
     return commentRepository.save(comment);
+  }
+
+  public Page<Comment> getCommentsByTouristicSpot(TouristicSpot touristicSpot, int page, int size) {
+    PageRequest pageable = PageRequest.of(page, size);
+    return commentRepository.findByTouristicSpot(touristicSpot, pageable);
   }
 }

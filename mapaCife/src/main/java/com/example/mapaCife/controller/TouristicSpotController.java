@@ -1,8 +1,10 @@
 package com.example.mapaCife.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mapaCife.dto.CreateTouristicSpotDTO;
@@ -50,7 +53,6 @@ public class TouristicSpotController {
     touristicSpot.setGmapsLink(dto.gmapsLink());
     touristicSpot.setTypeList(dto.typeList());
     touristicSpot.setCreatedAt(new Date());
-    touristicSpot.setUpdatedAt(new Date());
     touristicSpot.setPaid(dto.paid());
 
     try {
@@ -62,7 +64,16 @@ public class TouristicSpotController {
 
     TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
 
+  @GetMapping("touristic-spots")
+  public ResponseEntity<?> listTouristicSpots(
+      @RequestParam(required = false) String name,
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "10") int size) {
+    Page<TouristicSpot> touristicSpots = touristicSpotService.getTouristicSpotsByName(name, page - 1, size);
+    List<TouristicSpotDTO> response = TouristicSpotMapper.toDTOList(touristicSpots.getContent());
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @GetMapping("touristic-spots/{slug}")
