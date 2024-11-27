@@ -38,7 +38,7 @@ public class HealthcheckControllerTest {
     mockMvc.perform(get("/healthcheck"))
         .andExpectAll(
             status().isOk(),
-            content().string("WORKING"));
+            content().string("WORNG"));
   }
 
 }
