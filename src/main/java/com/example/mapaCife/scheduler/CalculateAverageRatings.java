@@ -29,7 +29,8 @@ public class CalculateAverageRatings {
   @Autowired
   private RatingRepository ratingRepository;
 
-  @Scheduled(cron = "* 0 * * * *") // Every hour
+  // @Scheduled(cron = "* 0 * * * *") // Every hour
+  @Scheduled(cron = "0 * * * * *") // Every minute
   public void calculateAverageRatings() {
     logger.info("Started to calculate average ratings");
     int pageNumber = 0;
