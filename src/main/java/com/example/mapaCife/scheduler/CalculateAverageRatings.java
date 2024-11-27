@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.example.mapaCife.models.Rating;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.repository.RatingRepository;
@@ -16,6 +19,7 @@ import com.example.mapaCife.repository.TouristicSpotRepository;
 
 @Component
 public class CalculateAverageRatings {
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private static final int PAGE_SIZE = 100;
 
@@ -27,23 +31,26 @@ public class CalculateAverageRatings {
 
   @Scheduled(cron = "* 0 * * * *") // Every hour
   public void calculateAverageRatings() {
+    logger.info("Started to calculate average ratings");
     int pageNumber = 0;
     Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
 
     Page<TouristicSpot> page;
     do {
+      logger.debug(String.format("Calculate average ratings - Page %d", pageNumber));
       page = touristicSpotRepository.findAll(pageable);
       if (page == null) {
         break;
       }
+      logger.debug(String.format("Calculate average ratings - Found %d spots", page.getSize()));
       for (TouristicSpot spot : page.getContent()) {
-        System.out.println(String.format("Calculating Average Rating for spot %s", spot.getName()));
+        logger.debug(String.format("Calculating Average Rating for spot %s", spot.getName()));
         Double averageRating = calculateAverageRating(spot);
         if (averageRating == null) {
-          System.out.println(String.format("No ratings for spot %s", spot.getName()));
+          logger.debug(String.format("No ratings for spot %s", spot.getName()));
           continue;
         }
-        System.out.println(String.format("Ratings for spot %s: %f", spot.getName(), averageRating.floatValue()));
+        logger.debug(String.format("Ratings for spot %s: %f", spot.getName(), averageRating.floatValue()));
         spot.setAverageRating(averageRating.floatValue());
 
         touristicSpotRepository.save(spot);
@@ -51,6 +58,7 @@ public class CalculateAverageRatings {
 
       pageable = pageable.next();
     } while (!page.isEmpty());
+    logger.info("Finished calculating average ratings");
   }
 
   private Double calculateAverageRating(TouristicSpot spot) {
