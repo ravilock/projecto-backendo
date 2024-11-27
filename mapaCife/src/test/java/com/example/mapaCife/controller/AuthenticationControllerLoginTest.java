@@ -3,8 +3,8 @@ package com.example.mapaCife.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Date;
 
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -101,7 +102,9 @@ public class AuthenticationControllerLoginTest {
     // Assert
     result
         .andExpect(status().isUnauthorized())
-        .andExpect(content().string("Invalid credentials"));
+        .andExpect(jsonPath("$.code", is(HttpStatus.UNAUTHORIZED.value())))
+        .andExpect(jsonPath("$.status", is(HttpStatus.UNAUTHORIZED.name())))
+        .andExpect(jsonPath("$.errors", contains("Invalid credentials")));
   }
 
   @Test
@@ -128,6 +131,8 @@ public class AuthenticationControllerLoginTest {
     // Assert
     result
         .andExpect(status().isUnauthorized())
-        .andExpect(content().string("Invalid credentials"));
+        .andExpect(jsonPath("$.code", is(HttpStatus.UNAUTHORIZED.value())))
+        .andExpect(jsonPath("$.status", is(HttpStatus.UNAUTHORIZED.name())))
+        .andExpect(jsonPath("$.errors", contains("Invalid credentials")));
   }
 }

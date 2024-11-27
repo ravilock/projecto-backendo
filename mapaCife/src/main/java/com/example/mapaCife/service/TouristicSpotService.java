@@ -21,7 +21,7 @@ public class TouristicSpotService {
   private TouristicSpotRepository touristicSpotRepository;
 
   @Transactional
-  public TouristicSpot updateTouristicSpot(String slug, UpdateTouristicSpotDTO dto) throws ResourceNotFoundException {
+  public TouristicSpot updateTouristicSpot(String slug, UpdateTouristicSpotDTO dto) {
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
       throw new ResourceNotFoundException(slug);

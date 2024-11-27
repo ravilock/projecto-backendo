@@ -17,6 +17,8 @@ import com.example.mapaCife.dto.AuthenticationDTO;
 import com.example.mapaCife.dto.RegisterDTO;
 import com.example.mapaCife.dto.UserDTO;
 import com.example.mapaCife.dto.UserMapper;
+import com.example.mapaCife.exception.InvalidCredentialsException;
+import com.example.mapaCife.exception.ResourceAlreadyExistsException;
 import com.example.mapaCife.models.User;
 import com.example.mapaCife.models.UserRole;
 import com.example.mapaCife.repository.UserRepository;
@@ -38,11 +40,11 @@ public class AuthenticationController {
   public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO dto) {
     UserDetails user = userRepository.findByUsername(dto.username());
     if (user == null) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+      throw new InvalidCredentialsException();
     }
     boolean passwordMatches = new BCryptPasswordEncoder().matches(dto.password(), user.getPassword());
     if (!passwordMatches) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+      throw new InvalidCredentialsException();
     }
 
     String token = tokenService.generateToken((User) user);
@@ -52,8 +54,8 @@ public class AuthenticationController {
 
   @PostMapping("/users")
   public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO) {
-    if (userRepository.findByUsername(registerDTO.username()) != null) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("user already exists");
+    if (userRepository.findByUsernameOrEmail(registerDTO.username(), registerDTO.email()) != null) {
+      throw new ResourceAlreadyExistsException(registerDTO.username());
     }
 
     User user = new User();
@@ -64,12 +66,7 @@ public class AuthenticationController {
     user.setEmail(registerDTO.email());
     user.setCreatedAt(new Date());
 
-    try {
-      user = userRepository.save(user);
-    } catch (Exception e) {
-      System.out.printf("Failed to save user: %s", e.toString());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
-    }
+    user = userRepository.save(user);
 
     String token = tokenService.generateToken(user);
     UserDTO response = UserMapper.toDTO(user, token);

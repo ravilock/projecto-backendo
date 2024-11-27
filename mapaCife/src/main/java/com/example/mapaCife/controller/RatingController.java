@@ -3,6 +3,9 @@ package com.example.mapaCife.controller;
 import com.example.mapaCife.dto.CreateRatingDTO;
 import com.example.mapaCife.dto.RatingDTO;
 import com.example.mapaCife.dto.RattingMapper;
+import com.example.mapaCife.exception.OperationNotAllowedException;
+import com.example.mapaCife.exception.ResourceAlreadyExistsException;
+import com.example.mapaCife.exception.ResourceNotFoundException;
 import com.example.mapaCife.models.Rating;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.models.User;
@@ -39,17 +42,18 @@ public class RatingController {
   public ResponseEntity<?> createRating(@PathVariable String slug, @RequestBody @Valid CreateRatingDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
-      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");
+      throw new RuntimeException("Failed to read authentication details");
     }
 
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
 
     List<Rating> ratings = ratingRepository.findByAuthorAndTouristicSpot(authenticatedUser, touristicSpot);
     if (ratings != null && !ratings.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("Touristic Spot already reviewed");
+      throw new ResourceAlreadyExistsException(
+          String.format("%s:%s", authenticatedUser.getUsername(), touristicSpot.getSlug()));
     }
 
     Rating rating = ratingService.createRating(dto, authenticatedUser, touristicSpot);
@@ -61,22 +65,22 @@ public class RatingController {
   public ResponseEntity<?> deleteRating(@PathVariable String slug, @PathVariable UUID id) {
     UserDetails authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
-      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");
+      throw new RuntimeException("Failed to read authentication details");
     }
 
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
 
     Rating rating = ratingRepository.findByExternalId(id);
     if (rating == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Rating not found!");
+      throw new ResourceNotFoundException(id.toString());
     }
 
     UserDetails ratingAuthor = rating.getAuthor();
     if (!ratingAuthor.getUsername().equals(authenticatedUser.getUsername())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      throw new OperationNotAllowedException();
     }
 
     ratingRepository.deleteById(rating.getId());

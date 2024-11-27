@@ -9,4 +9,6 @@ import com.example.mapaCife.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
   UserDetails findByUsername(String username);
+
+  UserDetails findByUsernameOrEmail(String username, String email);
 }
