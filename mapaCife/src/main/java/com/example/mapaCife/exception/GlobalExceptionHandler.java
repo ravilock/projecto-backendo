@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -15,6 +16,7 @@ public class GlobalExceptionHandler {
   private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
   @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public ResponseEntity<ApiError> genericException(Exception ex) {
     logger.error(ex.getMessage());
     ApiError apiError = ApiError
@@ -27,6 +29,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(InvalidCredentialsException.class)
+  @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public ResponseEntity<ApiError> handleAuthenticationExpcetions(RuntimeException ex) {
     logger.debug(ex.getMessage());
     ApiError apiError = ApiError
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex) {
     logger.debug(String.format("Validation error: %s", ex.getMessage()));
     List<String> errorList = ex.getBindingResult()
@@ -56,6 +60,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
   public ResponseEntity<ApiError> handleResourceNotFoundException(ResourceNotFoundException ex) {
     logger.debug(ex.getMessage());
     ApiError apiError = ApiError
@@ -68,6 +73,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(ResourceAlreadyExistsException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
   public ResponseEntity<ApiError> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
     logger.debug(ex.getMessage());
     ApiError apiError = ApiError
@@ -80,6 +86,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(OperationNotAllowedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
   public ResponseEntity<ApiError> handleOperationNotAllowedException(OperationNotAllowedException ex) {
     ApiError apiError = ApiError
         .builder()
