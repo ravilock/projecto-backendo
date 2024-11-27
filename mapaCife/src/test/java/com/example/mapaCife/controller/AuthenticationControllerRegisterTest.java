@@ -3,8 +3,8 @@ package com.example.mapaCife.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 import java.util.Date;
 
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -90,7 +91,8 @@ public class AuthenticationControllerRegisterTest {
     mockUser.setUsername(registerDTO.username());
     mockUser.setRole(UserRole.USER);
 
-    Mockito.when(userRepository.findByUsername(registerDTO.username())).thenReturn(mockUser);
+    Mockito.when(userRepository.findByUsernameOrEmail(registerDTO.username(), registerDTO.email()))
+        .thenReturn(mockUser);
 
     // Act
     ResultActions result = mockMvc.perform(post("/api/users")
@@ -100,7 +102,9 @@ public class AuthenticationControllerRegisterTest {
     // Assert
     result
         .andExpect(status().isConflict())
-        .andExpect(content().string("user already exists"));
+        .andExpect(jsonPath("$.code", is(HttpStatus.CONFLICT.value())))
+        .andExpect(jsonPath("$.status", is(HttpStatus.CONFLICT.name())))
+        .andExpect(jsonPath("$.errors", contains(String.format("Resource %s already exists", mockUser.getUsername()))));
   }
 
   @Test
@@ -119,6 +123,8 @@ public class AuthenticationControllerRegisterTest {
     // Assert
     result
         .andExpect(status().isInternalServerError())
-        .andExpect(content().string("internal server error"));
+        .andExpect(jsonPath("$.code", is(HttpStatus.INTERNAL_SERVER_ERROR.value())))
+        .andExpect(jsonPath("$.status", is(HttpStatus.INTERNAL_SERVER_ERROR.name())))
+        .andExpect(jsonPath("$.errors", contains("Internal Server Error")));
   }
 }

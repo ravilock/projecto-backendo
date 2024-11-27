@@ -22,6 +22,7 @@ import com.example.mapaCife.dto.CreateTouristicSpotDTO;
 import com.example.mapaCife.dto.TouristicSpotDTO;
 import com.example.mapaCife.dto.TouristicSpotMapper;
 import com.example.mapaCife.dto.UpdateTouristicSpotDTO;
+import com.example.mapaCife.exception.ResourceAlreadyExistsException;
 import com.example.mapaCife.exception.ResourceNotFoundException;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.repository.TouristicSpotRepository;
@@ -44,7 +45,7 @@ public class TouristicSpotController {
   public ResponseEntity<?> createTouristicSpot(@RequestBody @Valid CreateTouristicSpotDTO dto) {
     String slug = dto.name().replace(" ", "-").toLowerCase();
     if (touristicSpotRepository.findBySlug(slug) != null) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).body("touristic spot already exists");
+      throw new ResourceAlreadyExistsException(slug);
     }
     TouristicSpot touristicSpot = new TouristicSpot();
     touristicSpot.setSlug(slug);
@@ -54,12 +55,7 @@ public class TouristicSpotController {
     touristicSpot.setCreatedAt(new Date());
     touristicSpot.setPaid(dto.paid());
 
-    try {
-      touristicSpot = touristicSpotRepository.save(touristicSpot);
-    } catch (Exception e) {
-      System.out.printf("Failed to save touristic spot: %s", e.toString());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("internal server error");
-    }
+    touristicSpot = touristicSpotRepository.save(touristicSpot);
 
     TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -79,7 +75,7 @@ public class TouristicSpotController {
   public ResponseEntity<?> getTouristicSpot(@PathVariable String slug) {
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
     TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
     return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -88,23 +84,18 @@ public class TouristicSpotController {
   @PutMapping("/touristic-spots/{slug}")
   public ResponseEntity<?> updateTouristicSpot(@PathVariable String slug,
       @RequestBody @Valid UpdateTouristicSpotDTO dto) {
-    try {
-      TouristicSpot touristicSpot = touristicSpotService.updateTouristicSpot(slug, dto);
-      TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
-      return ResponseEntity.status(HttpStatus.OK).body(response);
-    } catch (ResourceNotFoundException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic spot not found!");
-    }
+    TouristicSpot touristicSpot = touristicSpotService.updateTouristicSpot(slug, dto);
+    TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @DeleteMapping("/touristic-spots/{slug}")
   public ResponseEntity<?> deleteTouristicSpot(@PathVariable String slug) {
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
     touristicSpotRepository.delete(touristicSpot);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
-
 }

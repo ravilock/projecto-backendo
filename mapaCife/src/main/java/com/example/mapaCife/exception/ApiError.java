@@ -1,10 +1,12 @@
 package com.example.mapaCife.exception;
 
-import lombok.Data;
+import java.util.List;
 
-@Data
-public class ApiError {
-  private String code;
-  private int status;
-  private String message;
+import lombok.Builder;
+
+@Builder
+public record ApiError(
+    Integer code,
+    String status,
+    List<String> errors) {
 }

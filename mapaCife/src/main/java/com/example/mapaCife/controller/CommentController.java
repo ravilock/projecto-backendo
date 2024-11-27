@@ -3,6 +3,8 @@ package com.example.mapaCife.controller;
 import com.example.mapaCife.dto.CommentDTO;
 import com.example.mapaCife.dto.CommentMapper;
 import com.example.mapaCife.dto.CreateCommentDTO;
+import com.example.mapaCife.exception.OperationNotAllowedException;
+import com.example.mapaCife.exception.ResourceNotFoundException;
 import com.example.mapaCife.models.Comment;
 import com.example.mapaCife.models.TouristicSpot;
 import com.example.mapaCife.models.User;
@@ -50,12 +52,12 @@ public class CommentController {
   public ResponseEntity<?> createComment(@PathVariable String slug, @RequestBody @Valid CreateCommentDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
-      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");
+      throw new RuntimeException("Failed to read authentication details");
     }
 
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
 
     Comment comment = commentService.createComment(dto, authenticatedUser, touristicSpot);
@@ -70,7 +72,7 @@ public class CommentController {
       @RequestParam(defaultValue = "10") int size) {
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
     Page<Comment> comments = commentService.getCommentsByTouristicSpot(touristicSpot, page - 1, size);
     List<CommentDTO> response = CommentMapper.toDTOList(comments.getContent());
@@ -81,22 +83,22 @@ public class CommentController {
   public ResponseEntity<?> deleteComment(@PathVariable String slug, @PathVariable UUID id) {
     UserDetails authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
-      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");
+      throw new RuntimeException("Failed to read authentication details");
     }
 
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
     if (touristicSpot == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
+      throw new ResourceNotFoundException(slug);
     }
 
     Comment comment = commentRepository.findByExternalId(id);
     if (comment == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Comment not found!");
+      throw new ResourceNotFoundException(slug);
     }
 
     UserDetails commentAuthor = comment.getAuthor();
     if (!commentAuthor.getUsername().equals(authenticatedUser.getUsername())) {
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      throw new OperationNotAllowedException();
     }
 
     commentRepository.deleteById(comment.getId());
