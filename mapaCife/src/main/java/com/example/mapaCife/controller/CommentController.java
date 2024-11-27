@@ -10,6 +10,8 @@ import com.example.mapaCife.repository.CommentRepository;
 import com.example.mapaCife.repository.TouristicSpotRepository;
 import com.example.mapaCife.service.CommentService;
 
+import jakarta.validation.Valid;
+
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class CommentController {
   private TouristicSpotRepository touristicSpotRepository;
 
   @PostMapping("/touristic-spots/{slug}/comments")
-  public ResponseEntity<?> createComment(@PathVariable String slug, @RequestBody CreateCommentDTO dto) {
+  public ResponseEntity<?> createComment(@PathVariable String slug, @RequestBody @Valid CreateCommentDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
       ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");

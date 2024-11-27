@@ -10,6 +10,8 @@ import com.example.mapaCife.repository.RatingRepository;
 import com.example.mapaCife.repository.TouristicSpotRepository;
 import com.example.mapaCife.service.RatingService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -34,7 +36,7 @@ public class RatingController {
   private TouristicSpotRepository touristicSpotRepository;
 
   @PostMapping("/touristic-spots/{slug}/ratings")
-  public ResponseEntity<?> createRating(@PathVariable String slug, @RequestBody CreateRatingDTO dto) {
+  public ResponseEntity<?> createRating(@PathVariable String slug, @RequestBody @Valid CreateRatingDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
       ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to read authentication details");
