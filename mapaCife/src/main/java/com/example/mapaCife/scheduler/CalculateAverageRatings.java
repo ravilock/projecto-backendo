@@ -33,6 +33,9 @@ public class CalculateAverageRatings {
     Page<TouristicSpot> page;
     do {
       page = touristicSpotRepository.findAll(pageable);
+      if (page == null) {
+        break;
+      }
       for (TouristicSpot spot : page.getContent()) {
         System.out.println(String.format("Calculating Average Rating for spot %s", spot.getName()));
         Double averageRating = calculateAverageRating(spot);
