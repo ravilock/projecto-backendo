@@ -1,6 +1,10 @@
 package com.example.mapaCife.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.mapaCife.dto.UpdateTouristicSpotDTO;
@@ -40,8 +44,16 @@ public class TouristicSpotService {
     if (dto.paid() != null) {
       touristicSpot.setPaid(dto.paid());
     }
+    touristicSpot.setUpdatedAt(new Date());
 
     return touristicSpot;
   }
 
+  public Page<TouristicSpot> getTouristicSpotsByName(String name, int page, int size) {
+    PageRequest pageable = PageRequest.of(page, size);
+    if (name == null || name.isEmpty()) {
+      return touristicSpotRepository.findAll(pageable);
+    }
+    return touristicSpotRepository.findByNameContainingIgnoreCase(name, PageRequest.of(page, size));
+  }
 }
