@@ -1,0 +1,490 @@
+{
+	"info": {
+		"_postman_id": "127dc30e-dbd6-403f-8c14-332d4c0f1b2b",
+		"name": "MapaCife",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31991799"
+	},
+	"item": [
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"ravime\",\n    \"name\": \"Ravi Menezes Silva Leal\",\n    \"email\": \"ravime@email.com\",\n    \"password\": \"Jump6Times!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check if the response contains the expected token",
+									"if (pm.response.code === 200) {",
+									"    // Parse the JSON response",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    // Extract the token",
+									"    const token = jsonData.token;",
+									"    ",
+									"    // If the token is not empty, set it as an environment variable",
+									"    if (token) {",
+									"        pm.collectionVariables.set(\"auth_token\", token);",
+									"        console.log(\"Token stored in environment: \" + token);",
+									"    } else {",
+									"        console.log(\"Token is empty.\");",
+									"    }",
+									"} else {",
+									"    console.log(\"Request failed. Status code: \" + pm.response.code);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"ravime\",\n    \"password\": \"Jump6Times!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pontos Turísticos",
+			"item": [
+				{
+					"name": "Criar Ponto Turístico",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Recife Antigo\",\n    \"gmapsLink\": \"https://maps.app.goo.gl/iKKzSWbPVZ3BkRwx7\",\n    \"description\": \"Recife, mais conhecido como Recife Antigo, é um bairro da cidade do Recife, Pernambuco, Brasil que corresponde à parte leste do seu Centro Histórico.\",\n    \"typeList\": [\n        \"bairro\"\n    ],\n    \"paid\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Ponto Turístico Por Slug",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "recife-antigo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Pontos Turísticos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "museu",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Ponto Turístico",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "recife-antigo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Ponto Turístico",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Old Recife\",\n    \"gmapsLink\": \"https://maps.app.goo.gl/iKKzSWbPVZ3BkRwx7\",\n    \"description\": \"Bananinha.\",\n    \"typeList\": [\n        \"bairro\"\n    ],\n    \"paid\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "old-recife2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comentários",
+			"item": [
+				{
+					"name": "Criar Comentário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"body\": \"Muitcho LUL!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug",
+								"comments"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "museu-brennand"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Comentário",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug/comments/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug",
+								"comments",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "museu-brennand"
+								},
+								{
+									"key": "id",
+									"value": "0ce2739e-7134-4083-85e7-92ccba4e56a0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Comentários",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug/comments?size=10&page=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "museu-brennand"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Avaliações",
+			"item": [
+				{
+					"name": "Criar Avaliação",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4.3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug/ratings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug",
+								"ratings"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "recife-antigo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Avaliação",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/touristic-spots/:slug/ratings/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"touristic-spots",
+								":slug",
+								"ratings",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "slug",
+									"value": "museu-brennand"
+								},
+								{
+									"key": "id",
+									"value": "e070ed60-f119-4f61-9251-63a2830433b0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/healthcheck",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": ""
+		},
+		{
+			"key": "baseUrlRemote",
+			"value": "https://mapacife-c8073b685725.herokuapp.com",
+			"type": "string"
+		}
+	]
+}
