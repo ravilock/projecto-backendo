@@ -48,5 +48,4 @@ jobs:
 
       # Run Maven build and tests
       - name: Build and test with Maven
-        working-directory: ./mapaCife
         run: mvn clean install --no-transfer-progress --batch-mode
