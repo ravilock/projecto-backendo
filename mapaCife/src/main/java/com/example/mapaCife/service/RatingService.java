@@ -1,29 +1,29 @@
 package com.example.mapaCife.service;
 
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.mapaCife.dto.RatingDTO;
+import com.example.mapaCife.dto.CreateRatingDTO;
 import com.example.mapaCife.models.Rating;
-import com.example.mapaCife.models.Rating;
-import com.example.mapaCife.repository.RatingRepository;
+import com.example.mapaCife.models.TouristicSpot;
+import com.example.mapaCife.models.User;
 import com.example.mapaCife.repository.RatingRepository;
 
-@Autowired
+@Service
 public class RatingService {
-    private final RatingRepository ratingRepository;
+  @Autowired
+  private RatingRepository ratingRepository;
 
-    public RatingService(RatingRepository ratingRepository) {
-        this.ratingRepository = ratingRepository;
-    }
-
-    public Rating criarRating(RatingDTO dto) {
-        Rating rating = new Rating();
-        rating.setNota((int) dto.getNotice());
-        rating.setAuthor(dto.getAuthor());
-        return ratingRepository.save(rating);
-    }
-
-    public void deletarRating(Long id) {
-        ratingRepository.deleteById(id);
-    }
+  public Rating createRating(CreateRatingDTO dto, User ratingAuthor, TouristicSpot touristicSpot) {
+    Rating rating = new Rating();
+    rating.setRating(dto.rating());
+    rating.setExternalId(UUID.randomUUID());
+    rating.setCreatedAt(new Date());
+    rating.setAuthor(ratingAuthor);
+    rating.setTouristicSpot(touristicSpot);
+    return ratingRepository.save(rating);
+  }
 }

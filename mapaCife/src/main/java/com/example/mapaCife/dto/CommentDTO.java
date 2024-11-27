@@ -1,10 +1,7 @@
 package com.example.mapaCife.dto;
 
-import lombok.Data;
+import java.util.Date;
+import java.util.UUID;
 
-@Data
-public class CommentDTO {
-    private String text;
-    private String author;
-    private Long touristicSpotId;
+public record CommentDTO(UUID id, Date createdAt, String body, String author) {
 }

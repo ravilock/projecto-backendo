@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,15 +66,15 @@ public class TouristicSpotController {
   }
 
   @GetMapping("touristic-spots/{slug}")
-  public ResponseEntity<?> getTouristicSpot(@PathVariable String slug){
+  public ResponseEntity<?> getTouristicSpot(@PathVariable String slug) {
     TouristicSpot touristicSpot = touristicSpotRepository.findBySlug(slug);
-    if (touristicSpot == null){
+    if (touristicSpot == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Touristic Spot not found!");
     }
     TouristicSpotDTO response = TouristicSpotMapper.toDTO(touristicSpot);
     return ResponseEntity.status(HttpStatus.OK).body(response);
   }
-  
+
   @PutMapping("/touristic-spots/{slug}")
   public ResponseEntity<?> updateTouristicSpot(@PathVariable String slug,
       @RequestBody @Valid UpdateTouristicSpotDTO dto) {
