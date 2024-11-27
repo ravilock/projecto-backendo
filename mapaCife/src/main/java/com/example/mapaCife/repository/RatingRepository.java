@@ -15,4 +15,6 @@ public interface RatingRepository extends JpaRepository<Rating, Long> {
   Rating findByExternalId(UUID externalId);
 
   List<Rating> findByAuthorAndTouristicSpot(UserDetails author, TouristicSpot touristicSpot);
+
+  List<Rating> findByTouristicSpot(TouristicSpot touristicSpot);
 }
