@@ -44,7 +44,7 @@ public class CalculateAverageRatings {
           continue;
         }
         System.out.println(String.format("Ratings for spot %s: %f", spot.getName(), averageRating.floatValue()));
-        spot.setAveragRating(averageRating.floatValue());
+        spot.setAverageRating(averageRating.floatValue());
 
         touristicSpotRepository.save(spot);
       }

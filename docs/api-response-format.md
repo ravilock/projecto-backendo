@@ -34,7 +34,6 @@ Make sure the right content type like `Content-Type: application/json; charset=u
   "slug": "how-to-train-your-dragon",
   "name": "How to train your dragon",
   "description": "Ever wonder how?",
-  "typeList": ["dragons", "training"],
   "createdAt": "2016-02-18T03:22:56.637Z",
   "updatedAt": "2016-02-18T03:48:35.824Z",
   "averageRating": 4.4
@@ -53,10 +52,6 @@ Make sure the right content type like `Content-Type: application/json; charset=u
       "slug": "how-to-train-your-dragon",
       "name": "How to train your dragon",
       "description": "Ever wonder how?",
-      "typeList": [
-        "dragons",
-        "training"
-      ],
       "createdAt": "2016-02-18T03:22:56.637Z",
       "updatedAt": "2016-02-18T03:48:35.824Z",
       "averageRating": 4.4
@@ -65,10 +60,6 @@ Make sure the right content type like `Content-Type: application/json; charset=u
       "slug": "how-to-train-your-dragon",
       "name": "How to train your dragon",
       "description": "Ever wonder how?",
-      "typeList": [
-        "dragons",
-        "training"
-      ],
       "createdAt": "2016-02-18T03:22:56.637Z",
       "updatedAt": "2016-02-18T03:48:35.824Z",
       "averageRating": 4.4

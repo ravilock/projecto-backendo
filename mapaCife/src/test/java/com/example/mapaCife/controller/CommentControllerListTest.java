@@ -118,7 +118,6 @@ public class CommentControllerListTest {
     touristicSpot.setName(name);
     touristicSpot.setDescription(name);
     touristicSpot.setGmapsLink(String.format("https://%s.com", name));
-    touristicSpot.setTypeList(null);
     touristicSpot.setCreatedAt(new Date());
     touristicSpot.setUpdatedAt(new Date());
     touristicSpot.setPaid(false);

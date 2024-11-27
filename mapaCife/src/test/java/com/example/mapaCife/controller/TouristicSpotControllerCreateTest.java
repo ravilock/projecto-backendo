@@ -62,13 +62,10 @@ public class TouristicSpotControllerCreateTest {
     user.setRole(UserRole.ADMIN);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     CreateTouristicSpotDTO createTouristicSpotDTO = new CreateTouristicSpotDTO(
         "Recife Antigo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
-        typeList,
         false);
     String slug = createTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
 
@@ -78,7 +75,6 @@ public class TouristicSpotControllerCreateTest {
     mockTouristicSpot.setName(createTouristicSpotDTO.name());
     mockTouristicSpot.setDescription(createTouristicSpotDTO.description());
     mockTouristicSpot.setGmapsLink(createTouristicSpotDTO.gmapsLink());
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(createTouristicSpotDTO.paid());
@@ -100,7 +96,6 @@ public class TouristicSpotControllerCreateTest {
         .andExpect(jsonPath("$.name", is(mockTouristicSpot.getName())))
         .andExpect(jsonPath("$.description", is(mockTouristicSpot.getDescription())))
         .andExpect(jsonPath("$.gmapsLink", is(mockTouristicSpot.getGmapsLink())))
-        .andExpect(jsonPath("$.typeList", is(mockTouristicSpot.getTypeList())))
         .andExpect(jsonPath("$.paid", is(mockTouristicSpot.getPaid())));
   }
 
@@ -112,13 +107,10 @@ public class TouristicSpotControllerCreateTest {
     user.setRole(UserRole.ADMIN);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     CreateTouristicSpotDTO createTouristicSpotDTO = new CreateTouristicSpotDTO(
         "Recife Antigo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
-        typeList,
         false);
     String slug = createTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
 
@@ -128,7 +120,6 @@ public class TouristicSpotControllerCreateTest {
     mockTouristicSpot.setName(createTouristicSpotDTO.name());
     mockTouristicSpot.setDescription(createTouristicSpotDTO.description());
     mockTouristicSpot.setGmapsLink(createTouristicSpotDTO.gmapsLink());
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(createTouristicSpotDTO.paid());

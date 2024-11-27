@@ -54,8 +54,6 @@ public class TouristicSpotControllerDeleteTest {
     user.setRole(UserRole.ADMIN);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     String touristSpotName = "Recife Antigo";
     String slug = touristSpotName.replace(" ", "-").toLowerCase();
 
@@ -65,7 +63,6 @@ public class TouristicSpotControllerDeleteTest {
     mockTouristicSpot.setName(touristSpotName);
     mockTouristicSpot.setDescription("Recife Antigo Descrito");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/iKKzSWbPVZ3BkRwx7");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);

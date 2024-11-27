@@ -60,8 +60,6 @@ public class CommentControllerDeleteTest {
     user.setRole(UserRole.USER);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setName("Recife Antigo");
@@ -69,7 +67,6 @@ public class CommentControllerDeleteTest {
     mockTouristicSpot.setSlug(slug);
     mockTouristicSpot.setDescription("Descricao do Recife Antigo");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/Hr842W9gABWKpdxm6");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);
@@ -130,8 +127,6 @@ public class CommentControllerDeleteTest {
     user.setRole(UserRole.USER);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setName("Recife Antigo");
@@ -139,7 +134,6 @@ public class CommentControllerDeleteTest {
     mockTouristicSpot.setSlug(slug);
     mockTouristicSpot.setDescription("Descricao do Recife Antigo");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/Hr842W9gABWKpdxm6");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);
@@ -172,8 +166,6 @@ public class CommentControllerDeleteTest {
     User commentAuthor = new User();
     commentAuthor.setUsername("comment-author");
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setName("Recife Antigo");
@@ -181,7 +173,6 @@ public class CommentControllerDeleteTest {
     mockTouristicSpot.setSlug(slug);
     mockTouristicSpot.setDescription("Descricao do Recife Antigo");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/Hr842W9gABWKpdxm6");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);

@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import lombok.Data;
 
 @Entity
@@ -20,15 +21,22 @@ public class TouristicSpot {
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   private Long id;
 
+  @Column(unique = true)
   private String slug;
+
   private String name;
+
   private String description;
+
   private String gmapsLink;
-  private List<String> typeList;
+
   private Date createdAt;
+
   private Date updatedAt;
+
   private Boolean paid;
-  private Float averagRating;
+
+  private Float averageRating;
 
   @OneToMany(mappedBy = "touristicSpot", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Comment> comments;

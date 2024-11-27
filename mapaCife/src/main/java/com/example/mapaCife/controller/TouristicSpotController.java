@@ -51,7 +51,6 @@ public class TouristicSpotController {
     touristicSpot.setName(dto.name());
     touristicSpot.setDescription(dto.description());
     touristicSpot.setGmapsLink(dto.gmapsLink());
-    touristicSpot.setTypeList(dto.typeList());
     touristicSpot.setCreatedAt(new Date());
     touristicSpot.setPaid(dto.paid());
 

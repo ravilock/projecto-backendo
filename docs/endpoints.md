@@ -107,7 +107,6 @@ Example request body:
   "name": "Pika de Brennand",
   "gmaps-link": "https://batata.com",
   "description": "Ever wonder how?",
-  "typeList": ["praca"],
   "paid": false
 }
 ```
@@ -115,8 +114,6 @@ Example request body:
 Authentication required, will return an [tourist-spot](./api-response-format.md#single-tourist-spot)
 
 Required fields: `name`, `gmaps-link`, `description`, `paid`
-
-Optional fields: `typeList` as an array of Strings
 
 ### Update tourist-spot
 
@@ -132,7 +129,7 @@ Example request body:
 
 Authentication required, returns the updated [tourist-spot](./api-response-format.md#single-tourist-spot)
 
-Required fields: `name`, `gmaps-link`, `description`, `paid`, `typeList`
+Required fields: `name`, `gmaps-link`, `description`, `paid`
 
 The `slug` also gets updated when the `name` is changed
 

@@ -68,8 +68,6 @@ public class RatingControllerCreateTest {
     user.setRole(UserRole.USER);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setName("Recife Antigo");
@@ -77,7 +75,6 @@ public class RatingControllerCreateTest {
     mockTouristicSpot.setSlug(slug);
     mockTouristicSpot.setDescription("Descricao do Recife Antigo");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/Hr842W9gABWKpdxm6");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);
@@ -143,8 +140,6 @@ public class RatingControllerCreateTest {
     user.setRole(UserRole.USER);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     TouristicSpot mockTouristicSpot = new TouristicSpot();
     mockTouristicSpot.setId(Long.valueOf(1));
     mockTouristicSpot.setName("Recife Antigo");
@@ -152,7 +147,6 @@ public class RatingControllerCreateTest {
     mockTouristicSpot.setSlug(slug);
     mockTouristicSpot.setDescription("Descricao do Recife Antigo");
     mockTouristicSpot.setGmapsLink("https://maps.app.goo.gl/Hr842W9gABWKpdxm6");
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(false);

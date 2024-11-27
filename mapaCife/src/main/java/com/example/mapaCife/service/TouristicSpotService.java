@@ -38,9 +38,6 @@ public class TouristicSpotService {
     if (dto.description() != null) {
       touristicSpot.setDescription(dto.description());
     }
-    if (dto.typeList() != null) {
-      touristicSpot.setTypeList(dto.typeList());
-    }
     if (dto.paid() != null) {
       touristicSpot.setPaid(dto.paid());
     }
