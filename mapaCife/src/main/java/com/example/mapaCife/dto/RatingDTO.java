@@ -1,20 +1,7 @@
 package com.example.mapaCife.dto;
 
-import com.example.mapaCife.models.Author;
+import java.util.Date;
+import java.util.UUID;
 
-import lombok.Data;
-
-@Data
-public class RatingDTO {
-    private int notice;
-    private String author;
-    private Long touristicSpotId;
-    public Object getNotice() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNotice'");
-    }
-    public Author getAuthor() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAuthor'");
-    }
+public record RatingDTO(UUID id, Date createdAt, Double rating, String author) {
 }

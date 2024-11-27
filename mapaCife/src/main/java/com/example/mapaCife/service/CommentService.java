@@ -1,29 +1,29 @@
 package com.example.mapaCife.service;
 
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.mapaCife.dto.CommentDTO;
+import com.example.mapaCife.dto.CreateCommentDTO;
 import com.example.mapaCife.models.Comment;
+import com.example.mapaCife.models.TouristicSpot;
+import com.example.mapaCife.models.User;
 import com.example.mapaCife.repository.CommentRepository;
 
 @Service
 public class CommentService {
-    private static final CommentRepository CommentRepository = null;
-        private final CommentRepository commentRepository;
-    
-        public CommentService(CommentRepository commenRepository) {
-            this.commentRepository = CommentRepository;
-    }
+  @Autowired
+  private CommentRepository commentRepository;
 
-    public Comment criarComment(CommentDTO dto) {
-        Comment comment = new Comment();
-        comment.setText(dto.getText());
-        comment.setUser(dto.getAuthor());
-        // Assuma que o PontoTuristico já foi buscado aqui
-        return commentRepository.save(comment);
-    }
-
-    public void deletarComment(Long id) {
-        commentRepository.deleteById(id);
-    }
+  public Comment createComment(CreateCommentDTO dto, User commentAuthor, TouristicSpot touristicSpot) {
+    Comment comment = new Comment();
+    comment.setBody(dto.body());
+    comment.setExternalId(UUID.randomUUID());
+    comment.setCreatedAt(new Date());
+    comment.setAuthor(commentAuthor);
+    comment.setTouristicSpot(touristicSpot);
+    return commentRepository.save(comment);
+  }
 }

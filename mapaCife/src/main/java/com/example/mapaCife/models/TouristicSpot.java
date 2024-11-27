@@ -7,7 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
 import lombok.Data;
 
 @Entity
@@ -27,4 +29,10 @@ public class TouristicSpot {
   private Date updatedAt;
   private Boolean paid;
   private Float averagRating;
+
+  @OneToMany(mappedBy = "touristicSpot", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Comment> comments;
+
+  @OneToMany(mappedBy = "touristicSpot", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Rating> ratings;
 }
