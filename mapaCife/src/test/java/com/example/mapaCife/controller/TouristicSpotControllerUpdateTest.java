@@ -63,14 +63,11 @@ public class TouristicSpotControllerUpdateTest {
     user.setRole(UserRole.ADMIN);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     String oldSlug = "recife-antigo";
     UpdateTouristicSpotDTO updateTouristicSpotDTO = new UpdateTouristicSpotDTO(
         "Recife Novo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
-        typeList,
         false);
     String slug = updateTouristicSpotDTO.name().replace(" ", "-").toLowerCase();
 
@@ -80,7 +77,6 @@ public class TouristicSpotControllerUpdateTest {
     mockTouristicSpot.setName(updateTouristicSpotDTO.name());
     mockTouristicSpot.setDescription(updateTouristicSpotDTO.description());
     mockTouristicSpot.setGmapsLink(updateTouristicSpotDTO.gmapsLink());
-    mockTouristicSpot.setTypeList(typeList);
     mockTouristicSpot.setCreatedAt(new Date());
     mockTouristicSpot.setUpdatedAt(new Date());
     mockTouristicSpot.setPaid(updateTouristicSpotDTO.paid());
@@ -102,7 +98,6 @@ public class TouristicSpotControllerUpdateTest {
         .andExpect(jsonPath("$.name", is(mockTouristicSpot.getName())))
         .andExpect(jsonPath("$.description", is(mockTouristicSpot.getDescription())))
         .andExpect(jsonPath("$.gmapsLink", is(mockTouristicSpot.getGmapsLink())))
-        .andExpect(jsonPath("$.typeList", is(mockTouristicSpot.getTypeList())))
         .andExpect(jsonPath("$.paid", is(mockTouristicSpot.getPaid())));
   }
 
@@ -114,14 +109,11 @@ public class TouristicSpotControllerUpdateTest {
     user.setRole(UserRole.ADMIN);
     String token = tokenService.generateToken(user);
 
-    ArrayList<String> typeList = new ArrayList<String>();
-    typeList.add("batata");
     String oldSlug = "recife-antigo";
     UpdateTouristicSpotDTO updateTouristicSpotDTO = new UpdateTouristicSpotDTO(
         "Recife Novo",
         "https://maps.app.goo.gl/Hr842W9gABWKpdxm6",
         "Descricao do Recife Antigo",
-        typeList,
         false);
 
     Mockito.when(userRepository.findByUsername(user.getUsername())).thenReturn(user);

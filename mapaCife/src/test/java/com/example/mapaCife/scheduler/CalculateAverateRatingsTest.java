@@ -62,7 +62,7 @@ public class CalculateAverateRatingsTest {
     Mockito.verify(touristicSpotRepository).save(captor.capture());
 
     TouristicSpot savedSpot = captor.getValue();
-    assertEquals(average.floatValue(), savedSpot.getAveragRating(), 0.05);
+    assertEquals(average.floatValue(), savedSpot.getAverageRating(), 0.05);
   }
 
   private TouristicSpot createRandomTouristicSpot() {
@@ -73,7 +73,6 @@ public class CalculateAverateRatingsTest {
     touristicSpot.setName(name);
     touristicSpot.setDescription(name);
     touristicSpot.setGmapsLink(String.format("https://%s.com", name));
-    touristicSpot.setTypeList(null);
     touristicSpot.setCreatedAt(new Date());
     touristicSpot.setUpdatedAt(new Date());
     touristicSpot.setPaid(false);
