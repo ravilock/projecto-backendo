@@ -24,11 +24,17 @@ import com.example.mapaCife.models.UserRole;
 import com.example.mapaCife.repository.UserRepository;
 import com.example.mapaCife.service.TokenService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api")
 @Validated
+
 public class AuthenticationController {
   @Autowired
   private UserRepository userRepository;
@@ -37,6 +43,11 @@ public class AuthenticationController {
   private TokenService tokenService;
 
   @PostMapping("/users/login")
+  @Operation(summary = "Authentication endpoint", method = "POST")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Authetication successfull", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)) })
+  })
   public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO dto) {
     UserDetails user = userRepository.findByUsername(dto.username());
     if (user == null) {
@@ -53,6 +64,11 @@ public class AuthenticationController {
   }
 
   @PostMapping("/users")
+  @Operation(summary = "User registration endpoint", method = "POST")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "Registration successfull", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)) })
+  })
   public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO) {
     if (userRepository.findByUsernameOrEmail(registerDTO.username(), registerDTO.email()) != null) {
       throw new ResourceAlreadyExistsException(registerDTO.username());

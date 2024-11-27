@@ -26,6 +26,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @RestController
 @RequestMapping("api")
 public class RatingController {
@@ -39,6 +45,11 @@ public class RatingController {
   private TouristicSpotRepository touristicSpotRepository;
 
   @PostMapping("/touristic-spots/{slug}/ratings")
+  @Operation(summary = "Rate touristic spot endpoint", method = "POST")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "Successfully rating on touristic spot", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = RatingDTO.class)) })
+  })
   public ResponseEntity<?> createRating(@PathVariable String slug, @RequestBody @Valid CreateRatingDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
@@ -62,6 +73,10 @@ public class RatingController {
   }
 
   @DeleteMapping("/touristic-spots/{slug}/ratings/{id}")
+  @Operation(summary = "Delete a touristic spot rating", method = "DELETE")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "Successfully deleted rating on touristic spot")
+  })
   public ResponseEntity<?> deleteRating(@PathVariable String slug, @PathVariable UUID id) {
     UserDetails authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {

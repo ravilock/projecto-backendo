@@ -34,6 +34,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @RestController
 @RequestMapping("api")
 @Validated
@@ -49,6 +55,11 @@ public class CommentController {
   private TouristicSpotRepository touristicSpotRepository;
 
   @PostMapping("/touristic-spots/{slug}/comments")
+  @Operation(summary = "Comment touristic spot endpoint", method = "POST")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "Successfully commented on touristic spot", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class)) })
+  })
   public ResponseEntity<?> createComment(@PathVariable String slug, @RequestBody @Valid CreateCommentDTO dto) {
     User authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
@@ -66,6 +77,11 @@ public class CommentController {
   }
 
   @GetMapping("/touristic-spots/{slug}/comments")
+  @Operation(summary = "Get touristic spot comment", method = "GET")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Touristic spot comment", content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = CommentDTO.class)) })
+  })
   public ResponseEntity<?> listTouristicSpotComments(
       @PathVariable String slug,
       @RequestParam(defaultValue = "1") int page,
@@ -80,6 +96,10 @@ public class CommentController {
   }
 
   @DeleteMapping("/touristic-spots/{slug}/comments/{id}")
+  @Operation(summary = "Delete touristic spot comment", method = "DELETE")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "Touristic spot comment")
+  })
   public ResponseEntity<?> deleteComment(@PathVariable String slug, @PathVariable UUID id) {
     UserDetails authenticatedUser = getAuthenticatedUser();
     if (authenticatedUser == null) {
